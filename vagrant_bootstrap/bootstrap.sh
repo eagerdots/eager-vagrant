@@ -8,7 +8,7 @@ sudo apt-get install apache2 php7.1 libapache2-mod-php7.1 php7.1-mcrypt php7.1-c
 sudo a2enmod rewrite
 
 sudo bash -c "cat > /etc/apache2/sites-available/000-default.conf" << EOF
-<Directory /var/www>
+<Directory /var/www/html>
         Options Indexes FollowSymLinks
         AllowOverride All
         Require all granted
