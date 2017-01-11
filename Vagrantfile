@@ -11,7 +11,10 @@ Vagrant.configure("2") do |config|
   #nginx
   config.vm.network :forwarded_port, guest: 80, host: 8888
 
-  config.vm.synced_folder "working_dir/", "/var/www/html"
+  config.vm.synced_folder "working_dir/", "/var/www/html",
+    owner: "ubuntu",
+    group: "www-data",
+    mount_options: ["dmode=775,fmode=664"]
 
   config.vm.provision :shell, path: "vagrant_bootstrap/bootstrap.sh"
 end
