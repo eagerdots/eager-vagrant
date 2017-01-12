@@ -8,9 +8,10 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/xenial64"
 
-  #nginx
+  #Apache
   config.vm.network :forwarded_port, guest: 80, host: 8888
 
+  #Shared folders
   config.vm.synced_folder "working_dir/", "/var/www/html",
     owner: "ubuntu",
     group: "www-data",
