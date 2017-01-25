@@ -39,7 +39,6 @@ let scssInclude = [
 let productionBuild = false; // Dev mode by default
 
 function empty() { // Enables us to disable certain plugins in certain build modes
-    let through = require("through2");
     return through.obj(function (file, enc, cb) {
         cb(null, file);
     });
@@ -215,9 +214,9 @@ gulp.task('dist', function (cb) {
 
 // Default task. Shoudl be preceded by `gulp dist`. Watches for changes, launches tasks and reloads the browser. Nice!
 gulp.task('default', ['browser-sync'], function () {
-    watch(paths.src.index, () => runSequence('copy-index', 'browser-reload'));
-    watch(paths.src.app, () => runSequence('clean-app', 'copy-app', 'browser-reload'));
-    watch(paths.src.allJs, () => runSequence('scripts', 'browser-reload'));
-    watch(paths.src.scss, () => runSequence('scss', 'browser-reload'));
+    watch(paths.src.index,  () => runSequence('copy-index', 'browser-reload'));
+    watch(paths.src.app,    () => runSequence('clean-app', 'copy-app', 'browser-reload'));
+    watch(paths.src.allJs,  () => runSequence('scripts', 'browser-reload'));
+    watch(paths.src.scss,   () => runSequence('scss', 'browser-reload'));
     watch(paths.src.images, () => runSequence('imagemin', 'browser-reload'));
 });
