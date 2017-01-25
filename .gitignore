@@ -4,3 +4,4 @@
 /dist
 working_dir/
 *.log
+*svg-sprite.svg
