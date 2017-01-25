@@ -1,8 +1,6 @@
-*-console.log
-node_modules/
-bower_components/
-.vagrant/
-
-.idea/
-.DS_Store
-*~
+/.idea
+/node_modules
+/bower_components
+/dist
+working_dir/
+*.log
