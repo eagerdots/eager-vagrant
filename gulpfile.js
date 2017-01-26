@@ -197,7 +197,9 @@ gulp.task('browser-sync', function () {
 
 // Reload the browser
 gulp.task('browser-reload', function () {
-  browserSync.reload();
+  setTimeout(() => {
+    browserSync.reload();
+  }, 100)
 });
 
 // Empty dist dir and remove the svg sprite
