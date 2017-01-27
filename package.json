@@ -1,13 +1,12 @@
 {
-  "name": "html5bp",
-  "version": "1.0.0",
-  "description": "single-page html5 boilerplate - jQuery, Zurb Foundation",
-  "main": "index.html",
-  "author": "gp",
+  "name": "eager-vagrant",
+  "version": "0.0.1",
+  "description": "eager-vagrant",
+  "author": "gpluta",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/gregzx/ultimate-html-boilerplate.git"
+    "url": "https://github.com/eagerdots/eager-vagrant.git"
   },
   "devDependencies": {
     "babel-plugin-transform-runtime": "^6.22.0",
