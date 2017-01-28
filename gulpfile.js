@@ -226,4 +226,5 @@ gulp.task('default', ['browser-sync'], function () {
   watch(paths.src.allJs, () => runSequence('scripts', 'browser-reload'));
   watch(paths.src.scss, () => runSequence('scss', 'browser-reload'));
   watch(paths.src.images, () => runSequence('imagemin', 'browser-reload'));
+  watch(paths.src.svg, () => runSequence('svg-sprite', 'copy-index', 'browser-reload'));
 });
