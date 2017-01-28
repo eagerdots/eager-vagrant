@@ -7,7 +7,8 @@
 
 let autoprefixer = require('gulp-autoprefixer'),
   babelify = require('babelify'),
-  browserify = require('browserify'),
+  batch = require('gulp-batch');
+browserify = require('browserify'),
   browserSync = require('browser-sync'),
   buffer = require('vinyl-buffer'),
   changed = require('gulp-changed'),
@@ -171,8 +172,10 @@ gulp.task('copy-index', function () {
 
 // Copy all php files from app/ folder (libs)
 gulp.task('copy-app', function () {
-  return gulp.src(paths.src.app)
-    .pipe(gulp.dest(paths.dist.app));
+  setTimeout(() => {
+    return gulp.src(paths.src.app)
+      .pipe(gulp.dest(paths.dist.app));
+  }, 200);
 });
 
 // Remove everything from app/ in dist dir (reversed copy-app)
@@ -200,7 +203,7 @@ gulp.task('browser-sync', function () {
 gulp.task('browser-reload', function () {
   setTimeout(() => {
     browserSync.reload();
-  }, 100)
+  }, 200)
 });
 
 // Empty dist dir and remove the svg sprite
@@ -222,10 +225,22 @@ gulp.task('dist', function (cb) {
 
 // Default task. Shoudl be preceded by `gulp dist`. Watches for changes, launches tasks and reloads the browser. Nice!
 gulp.task('default', ['browser-sync'], function () {
-  watch(paths.src.index, () => runSequence('copy-index', 'browser-reload'));
-  watch(paths.src.app, () => runSequence('clean-app', 'copy-app', 'browser-reload'));
-  watch(paths.src.allJs, () => runSequence('scripts', 'browser-reload'));
-  watch(paths.src.scss, () => runSequence('scss', 'browser-reload'));
-  watch(paths.src.images, () => runSequence('imagemin', 'browser-reload'));
-  watch(paths.src.svg, () => runSequence('svg-sprite', 'copy-index', 'browser-reload'));
+  watch(paths.src.index, batch((events, done) => {
+    gulp.start('copy-index', 'browser-reload', done);
+  }));
+  watch(paths.src.app, batch((events, done) => {
+    gulp.start('clean-app', 'copy-app', 'browser-reload', done);
+  }));
+  watch(paths.src.allJs, batch((events, done) => {
+    gulp.start('scripts', 'browser-reload', done);
+  }));
+  watch(paths.src.scss, batch((events, done) => {
+    gulp.start('scss', 'browser-reload', done);
+  }));
+  watch(paths.src.images, batch((events, done) => {
+    gulp.start('imagemin', 'browser-reload', done);
+  }));
+  watch(paths.src.svg, batch((events, done) => {
+    gulp.start('svg-sprite', 'browser-reload', done);
+  }));
 });
