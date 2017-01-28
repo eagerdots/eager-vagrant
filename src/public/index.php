@@ -5,12 +5,14 @@
   <meta charset="UTF-8">
   <title>TITLE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="description" content="..."/>
-  <meta property="og:title" content="..."/>
-  <meta property="og:site_name" content="..."/>
-  <meta property="og:description" content="..."/>
-  <meta property="og:image" content="..."/>
-  <meta property="og:url" content="..."/>
+  <meta name="description" content=""/>
+  <meta property="og:title" content=""/>
+  <meta property="og:site_name" content=""/>
+  <meta property="og:description" content=""/>
+  <meta property="og:image" content=""/>
+  <meta property="og:url" content=""/>
+  <link href="" rel="shortcut icon">
+
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
