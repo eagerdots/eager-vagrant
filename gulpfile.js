@@ -33,7 +33,8 @@ let autoprefixer = require('gulp-autoprefixer'),
 
 // Additional files to be included by scss
 let scssInclude = [
-  'node_modules/foundation-sites/scss'
+  'node_modules/foundation-sites/scss',
+  'node_modules/normalize.css'
 ];
 
 let productionBuild = false; // Dev mode by default
@@ -204,7 +205,7 @@ gulp.task('browser-reload', function () {
 
 // Empty dist dir and remove the svg sprite
 gulp.task('clean', function () {
-  del([paths.dist.base, srcBase + '/svg-sprite.svg']);
+  del([paths.dist.base + '/**/*.*']);
 });
 
 // PURGE EVERYTHING - leave only sources behind
