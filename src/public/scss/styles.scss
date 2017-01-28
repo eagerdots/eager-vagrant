@@ -1,4 +1,7 @@
 @charset "utf-8";
 
+// This import will work, tahnks to adding its path to `scssInclude` in gulpfile.js.
+@import "normalize";
+
 // Go!
 @import "theme";
