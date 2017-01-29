@@ -7,8 +7,8 @@
 
 let autoprefixer = require('gulp-autoprefixer'),
   babelify = require('babelify'),
-  batch = require('gulp-batch');
-browserify = require('browserify'),
+  batch = require('gulp-batch'),
+  browserify = require('browserify'),
   browserSync = require('browser-sync'),
   buffer = require('vinyl-buffer'),
   changed = require('gulp-changed'),
