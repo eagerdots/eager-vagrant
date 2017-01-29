@@ -241,6 +241,6 @@ gulp.task('default', ['browser-sync'], function () {
     gulp.start('imagemin', 'browser-reload', done);
   }));
   watch(paths.src.svg, batch((events, done) => {
-    gulp.start('svg-sprite', 'browser-reload', done);
+    gulp.start('svg-sprite', 'copy-index', 'browser-reload', done);
   }));
 });
