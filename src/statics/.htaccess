@@ -44,9 +44,9 @@ Options -Indexes
 # then you can uncomment (delete the hash/pound/octothorpe/number symbol)
 # the section below:
 
-#<IfModule mod_mime.c>
-#  AddType application/font-woff2    woff2
-#</IfModule>
+<IfModule mod_mime.c>
+  AddType application/font-woff2    woff2
+</IfModule>
 
 # Block access to all hidden files and directories. These types of files
 # usually contain user preferences and can include private information like,
