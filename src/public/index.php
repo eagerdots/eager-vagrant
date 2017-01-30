@@ -24,6 +24,7 @@
 echo "<h1>Welcome!</h1>";
 ?>
 
+<script src="/js/vendor.js"></script>
 <script src="/js/scripts.js"></script>
 </body>
 </html>
