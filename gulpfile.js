@@ -80,7 +80,11 @@ let paths = {
     scss: srcBase + 'public/scss/**/*.scss',
     js: srcBase + 'public/js/app.js',
     allJs: srcBase + 'public/js/**/*.js',
-    statics: [srcBase + 'statics/**/*.*', srcBase + 'statics/**/.*'] // Include dotfiles
+    statics: [srcBase + 'statics/**/*.*', srcBase + 'statics/**/.*'], // Include dotfiles
+
+    // This is a list of js files that will be concatenated and saved as vendor.js file. For stuff that can not be imported
+    // into the project with `require()`
+    vendorJs: []
   },
   dist: {
     base: distBase,
@@ -129,6 +133,16 @@ gulp.task('scripts', function () {
     .pipe(uglify())
     .pipe(sourcemaps.write())
     .pipe(gulp.dest(paths.dist.js));
+});
+
+// Concat and minify JS Includes
+gulp.task('scripts-vendor', function () {
+  if (paths.src.vendorJs.length) {
+    return gulp.src(paths.src.vendorJs)
+      .pipe(uglify())
+      .pipe(concat('vendor.js'))
+      .pipe(gulp.dest(paths.dist.js));
+  }
 });
 
 // Minify and copy images
@@ -195,7 +209,8 @@ gulp.task('copy-statics', function () {
 gulp.task('browser-sync', function () {
   browserSync.init({
     proxy: "localhost:8888",
-    open: false
+    open: false,
+    notify: false
   });
 });
 
@@ -219,7 +234,7 @@ gulp.task('purge', function () {
 // Build the whole project by launching tasks synchronously
 gulp.task('dist', function (cb) {
   runSequence(
-    'clean', 'scss', 'scripts', 'imagemin', 'svg-sprite', 'copy-index', 'copy-app', 'copy-statics', cb
+    'clean', 'scss', 'scripts', 'scripts-vendor', 'imagemin', 'svg-sprite', 'copy-index', 'copy-app', 'copy-statics', cb
   );
 });
 
@@ -242,5 +257,8 @@ gulp.task('default', ['browser-sync'], function () {
   }));
   watch(paths.src.svg, batch((events, done) => {
     gulp.start('svg-sprite', 'copy-index', 'browser-reload', done);
+  }));
+  watch(paths.src.statics, batch((events, done) => {
+    gulp.start('copy-statics', 'browser-reload', done);
   }));
 });
