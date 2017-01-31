@@ -5,7 +5,7 @@
  * Switch dist dir from dev to prod: add `-p` or `--production` arg to any task
  */
 
-const autoprefixer = require('gulp-autoprefixer'),
+let autoprefixer = require('gulp-autoprefixer'),
   babelify = require('babelify'),
   batch = require('gulp-batch'),
   browserify = require('browserify'),
