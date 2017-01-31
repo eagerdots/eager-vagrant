@@ -5,7 +5,7 @@
  * Switch dist dir from dev to prod: add `-p` or `--production` arg to any task
  */
 
-let autoprefixer = require('gulp-autoprefixer'),
+const autoprefixer = require('gulp-autoprefixer'),
   babelify = require('babelify'),
   batch = require('gulp-batch'),
   browserify = require('browserify'),
@@ -102,41 +102,39 @@ console.log('productionBuild (true for production build): ', productionBuild);
 console.log('------------------------------------------------------');
 
 // Compile scss
-gulp.task('scss', function () {
-  gulp.src(paths.src.scss)
-    .pipe(plumber(function (error) {
-      gutil.log(gutil.colors.red(error.message));
-      this.emit('end');
-    }))
-    .pipe(sourcemaps.init())
-    .pipe(sass({
-      errLogToConsole: true,
-      includePaths: scssInclude
-    }))
-    .pipe(autoprefixer({
-      browsers: ['last 2 versions']
-    }))
-    .pipe(cleanCss())
-    .pipe(sourcemaps.write())
-    .pipe(gulp.dest(paths.dist.css));
-});
+gulp.task('scss', () => gulp.src(paths.src.scss)
+  .pipe(plumber(function (error) {
+    gutil.log(gutil.colors.red(error.message));
+    this.emit('end');
+  }))
+  .pipe(sourcemaps.init())
+  .pipe(sass({
+    errLogToConsole: true,
+    includePaths: scssInclude
+  }))
+  .pipe(autoprefixer({
+    browsers: ['last 2 versions']
+  }))
+  .pipe(cleanCss())
+  .pipe(sourcemaps.write())
+  .pipe(gulp.dest(paths.dist.css))
+);
 
 // Compile JS (bundle with browserify, use babel (see .babelrc in root dir), sourcemaps (for dev only), uglify)
-gulp.task('scripts', function () {
-  return browserify(paths.src.js)
-    .transform('babelify')
-    .bundle()
-    .pipe(plumber())
-    .pipe(source('scripts.js'))
-    .pipe(buffer())
-    .pipe(sourcemaps.init())
-    .pipe(uglify())
-    .pipe(sourcemaps.write())
-    .pipe(gulp.dest(paths.dist.js));
-});
+gulp.task('scripts', () => browserify(paths.src.js)
+  .transform('babelify')
+  .bundle()
+  .pipe(plumber())
+  .pipe(source('scripts.js'))
+  .pipe(buffer())
+  .pipe(sourcemaps.init())
+  .pipe(uglify())
+  .pipe(sourcemaps.write())
+  .pipe(gulp.dest(paths.dist.js))
+);
 
 // Concat and minify JS Includes
-gulp.task('scripts-vendor', function () {
+gulp.task('scripts-vendor', () => {
   if (paths.src.vendorJs.length) {
     return gulp.src(paths.src.vendorJs)
       .pipe(uglify())
@@ -146,46 +144,43 @@ gulp.task('scripts-vendor', function () {
 });
 
 // Minify and copy images
-gulp.task('imagemin', function () {
-  return gulp.src(paths.src.images)
-    .pipe(changed(paths.dist.images))
-    .pipe(imagemin({
-      progressive: true,
-      svgoPlugins: [{
-        removeViewBox: false
-      }]
-    }))
-    .pipe(gulp.dest(paths.dist.images));
-});
+gulp.task('imagemin', () => gulp.src(paths.src.images)
+  .pipe(changed(paths.dist.images))
+  .pipe(imagemin({
+    progressive: true,
+    svgoPlugins: [{
+      removeViewBox: false
+    }]
+  }))
+  .pipe(gulp.dest(paths.dist.images))
+);
 
 // Buld an svg sprite to be inlined in index.php later
-gulp.task('svg-sprite', function () {
-  return gulp.src([paths.src.svg])
-    .pipe(svgmin({
-      floatPrecision: 2,
-      plugins: [{
-        removeDoctype: true
-      }]
-    }))
-    .pipe(rename({prefix: 'image-'}))
-    .pipe(svgstore({inlineSvg: true}))
-    .pipe(rename({basename: 'svg-sprite', extname: '.svg'}))
-    .pipe(gulp.dest(paths.src.base));
-});
+gulp.task('svg-sprite', () => gulp.src([paths.src.svg])
+  .pipe(svgmin({
+    floatPrecision: 2,
+    plugins: [{
+      removeDoctype: true
+    }]
+  }))
+  .pipe(rename({prefix: 'image-'}))
+  .pipe(svgstore({inlineSvg: true}))
+  .pipe(rename({basename: 'svg-sprite', extname: '.svg'}))
+  .pipe(gulp.dest(paths.src.base))
+);
 
 // Inlcude inline stuff and copy index.php to dist folder
-gulp.task('copy-index', function () {
-  return gulp.src(paths.src.index)
-    .pipe(plumber())
-    .pipe(fileinclude({
-      prefix: '@@',
-      basepath: '@file'
-    }))
-    .pipe(gulp.dest(paths.dist.index));
-});
+gulp.task('copy-index', () => gulp.src(paths.src.index)
+  .pipe(plumber())
+  .pipe(fileinclude({
+    prefix: '@@',
+    basepath: '@file'
+  }))
+  .pipe(gulp.dest(paths.dist.index))
+);
 
 // Copy all php files from app/ folder (libs)
-gulp.task('copy-app', function () {
+gulp.task('copy-app', () => {
   setTimeout(() => {
     return gulp.src(paths.src.app)
       .pipe(gulp.dest(paths.dist.app));
@@ -193,20 +188,19 @@ gulp.task('copy-app', function () {
 });
 
 // Remove everything from app/ in dist dir (reversed copy-app)
-gulp.task('clean-app', function () {
+gulp.task('clean-app', () => {
   del(paths.dist.app + '/*');
 });
 
 // Copy all contents of statics/ folder to the root of public/ in dist folder (for stuff such
 // as .htaccess or robots.txt)
-gulp.task('copy-statics', function () {
-  return gulp.src(paths.src.statics)
-    .pipe(plumber())
-    .pipe(gulp.dest(paths.dist.statics));
-});
+gulp.task('copy-statics', () => gulp.src(paths.src.statics)
+  .pipe(plumber())
+  .pipe(gulp.dest(paths.dist.statics))
+);
 
 // Browser-sync - proxy requests to our apache on vagrant
-gulp.task('browser-sync', function () {
+gulp.task('browser-sync', () => {
   browserSync.init({
     proxy: "localhost:8888",
     open: false,
@@ -215,24 +209,24 @@ gulp.task('browser-sync', function () {
 });
 
 // Reload the browser
-gulp.task('browser-reload', function () {
+gulp.task('browser-reload', () => {
   setTimeout(() => {
     browserSync.reload();
   }, 200)
 });
 
 // Empty dist dir and remove the svg sprite
-gulp.task('clean', function () {
+gulp.task('clean', () => {
   del([paths.dist.base + '/**/*.*']);
 });
 
 // PURGE EVERYTHING - leave only sources behind
-gulp.task('purge', function () {
+gulp.task('purge', () => {
   del(['dist/', 'bower_components/', 'node_modules/', paths.dist.base + '/*']);
 });
 
 // Build the whole project by launching tasks synchronously
-gulp.task('dist', function (cb) {
+gulp.task('dist', cb => {
   runSequence(
     'clean', 'scss', 'scripts', 'scripts-vendor', 'imagemin', 'svg-sprite', 'copy-index', 'copy-app', 'copy-statics', cb
   );
