@@ -125,7 +125,6 @@ gulp.task('scripts', () => browserify(paths.src.js)
   .transform('babelify')
   .bundle()
   .on('error', (err) => {
-    console.log('ADADASDASDASD');
     console.warn('Error :', err.message); this.emit('end')
   })
   .pipe(plumber())
