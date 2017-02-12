@@ -72,7 +72,7 @@ let distBase = productionBuild ? 'dist/' : 'working_dir/', srcBase = 'src/';
 let paths = {
   src: {
     base: srcBase,
-    index: srcBase + 'public/index.php',
+    index: srcBase + 'public/index.{php,html}',
     app: [srcBase + 'app/**/*.*', srcBase + 'app/**/*'],
     images: srcBase + 'public/images/**/*.{jpg,png,gif,svg}',
     svg: srcBase + 'svg/**/*.svg',
@@ -125,7 +125,8 @@ gulp.task('scripts', () => browserify(paths.src.js)
   .transform('babelify')
   .bundle()
   .on('error', (err) => {
-    console.warn('Error :', err.message); this.emit('end')
+    console.warn('Error :', err.message);
+    this.emit('end')
   })
   .pipe(plumber())
   .pipe(source('scripts.js'))
@@ -205,6 +206,9 @@ gulp.task('copy-statics', () => gulp.src(paths.src.statics)
 // Browser-sync - proxy requests to our apache on vagrant
 gulp.task('browser-sync', () => {
   browserSync.init({
+    // server: {
+    //   baseDir: './working_dir/public'
+    // },
     proxy: "localhost:8888",
     open: false,
     notify: false
