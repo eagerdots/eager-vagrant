@@ -18,4 +18,9 @@ Vagrant.configure("2") do |config|
     mount_options: ["dmode=775,fmode=664"]
 
   config.vm.provision :shell, path: "vagrant_bootstrap/bootstrap.sh"
+
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 512
+    v.cpus = 1
+  end
 end
