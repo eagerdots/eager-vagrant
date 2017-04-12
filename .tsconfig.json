@@ -5,7 +5,10 @@
     "moduleResolution": "node",
     "allowUnreachableCode": false,
     "noImplicitReturns": true,
-    "baseUrl": "src/public/ts"
+    "baseUrl": "src/public/ts",
+    "lib": [
+      "dom", "es2015"
+    ]
   },
   "exclude": [
     "node_modules"
