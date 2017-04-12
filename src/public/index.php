@@ -1,30 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <title>TITLE</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="description" content=""/>
-  <meta property="og:title" content=""/>
-  <meta property="og:site_name" content=""/>
-  <meta property="og:description" content=""/>
-  <meta property="og:image" content=""/>
-  <meta property="og:url" content=""/>
-  <link href="" rel="shortcut icon">
-
-  <link rel="stylesheet" href="/css/styles.css">
+<?php include_once "../app/templates/head.php"; ?>
 </head>
 <body>
 <div style="display: none;">
-  @@include('../svg-sprite.svg')
+    <?php echo file_get_contents("images/svg-sprite.svg"); ?>
 </div>
 
-<?php
-echo "<h1>Welcome!</h1>";
-?>
-
-<script src="/js/vendor.js"></script>
-<script src="/js/scripts.js"></script>
+<script src="js/scripts.js"></script>
 </body>
 </html>
