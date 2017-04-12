@@ -3,9 +3,14 @@
     "target": "ES5",
     "module": "commonjs",
     "moduleResolution": "node",
-    "rootDir": "."
+    "allowUnreachableCode": false,
+    "noImplicitReturns": true,
+    "baseUrl": "src/public/ts"
   },
   "exclude": [
     "node_modules"
+  ],
+  "include": [
+    "src/public/ts/**/*.ts"
   ]
 }
