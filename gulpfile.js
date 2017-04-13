@@ -29,6 +29,7 @@ let autoprefixer = require('gulp-autoprefixer'),
   svgstore = require('gulp-svgstore'),
   through = require('through2'),
   tsify = require('tsify'),
+  tslint = require('gulp-tslint'),
   uglify = require('gulp-uglify'),
   watch = require('gulp-watch');
 
@@ -120,19 +121,27 @@ gulp.task('scss', () => gulp.src(paths.src.scss)
   .pipe(gulp.dest(paths.dist.css))
 );
 
-gulp.task('ts', () => browserify({debug: (productionBuild === false)})
-  .add(paths.src.ts)
-  .plugin(tsify)
-  .bundle()
-  .on('error', function (error) {
-    console.error(error.toString());
-    this.emit('end');
-  })
-  .pipe(plumber())
-  .pipe(source('scripts.js'))
-  .pipe(buffer())
-  .pipe(uglify())
-  .pipe(gulp.dest(paths.dist.js))
+gulp.task('tslint', () =>
+  gulp.src(paths.src.allTs)
+    .pipe(tslint({
+      formatter: 'verbose'
+    }))
+    .pipe(tslint.report({emitError: false,summarizeFailureOutput: true})));
+
+gulp.task('ts', () =>
+  browserify({debug: (productionBuild === false)})
+    .add(paths.src.ts)
+    .plugin(tsify)
+    .bundle()
+    .on('error', function (error) {
+      console.error(error.toString());
+      this.emit('end');
+    })
+    .pipe(plumber())
+    .pipe(source('scripts.js'))
+    .pipe(buffer())
+    .pipe(uglify())
+    .pipe(gulp.dest(paths.dist.js))
 );
 
 // Concat and minify JS Includes
@@ -146,44 +155,45 @@ gulp.task('scripts-vendor', () => {
 });
 
 // Minify and copy images
-gulp.task('imagemin', () => gulp.src(paths.src.images)
-  .pipe(changed(paths.dist.images))
-  .pipe(imagemin({
-    progressive: true,
-    svgoPlugins: [{
-      removeViewBox: false
-    }]
-  }))
-  .pipe(gulp.dest(paths.dist.images))
+gulp.task('imagemin', () =>
+  gulp.src(paths.src.images)
+    .pipe(changed(paths.dist.images))
+    .pipe(imagemin({
+      progressive: true,
+      svgoPlugins: [{
+        removeViewBox: false
+      }]
+    }))
+    .pipe(gulp.dest(paths.dist.images))
 );
 
 // Buld an svg sprite to be inlined in index.php later
-gulp.task('svg-sprite', () => gulp.src([paths.src.svg])
-  .pipe(svgmin({
-    floatPrecision: 2,
-    plugins: [{
-      removeDoctype: true
-    }]
-  }))
-  .pipe(rename({prefix: 'image-'}))
-  .pipe(svgstore({inlineSvg: true}))
-  .pipe(rename({basename: 'svg-sprite', extname: '.svg'}))
-  .pipe(gulp.dest(paths.dist.images))
+gulp.task('svg-sprite', () =>
+  gulp.src([paths.src.svg])
+    .pipe(svgmin({
+      floatPrecision: 2,
+      plugins: [{
+        removeDoctype: true
+      }]
+    }))
+    .pipe(rename({prefix: 'image-'}))
+    .pipe(svgstore({inlineSvg: true}))
+    .pipe(rename({basename: 'svg-sprite', extname: '.svg'}))
+    .pipe(gulp.dest(paths.dist.images))
 );
 
 // Inlcude inline stuff and copy index.php to dist folder
-gulp.task('copy-index', () => gulp.src(paths.src.index)
-  .pipe(plumber())
-  .pipe(gulp.dest(paths.dist.index))
+gulp.task('copy-index', () =>
+  gulp.src(paths.src.index)
+    .pipe(plumber())
+    .pipe(gulp.dest(paths.dist.index))
 );
 
 // Copy all php files from app/ folder (libs)
-gulp.task('copy-app', () => {
-  setTimeout(() => {
-    return gulp.src(paths.src.app)
-      .pipe(gulp.dest(paths.dist.app));
-  }, 200);
-});
+gulp.task('copy-app', () =>
+  gulp.src(paths.src.app)
+    .pipe(gulp.dest(paths.dist.app))
+);
 
 // Remove everything from app/ in dist dir (reversed copy-app)
 gulp.task('clean-app', () => {
@@ -192,9 +202,10 @@ gulp.task('clean-app', () => {
 
 // Copy all contents of statics/ folder to the root of public/ in dist folder (for stuff such
 // as .htaccess or robots.txt)
-gulp.task('copy-statics', () => gulp.src(paths.src.statics)
-  .pipe(plumber())
-  .pipe(gulp.dest(paths.dist.statics))
+gulp.task('copy-statics', () =>
+  gulp.src(paths.src.statics)
+    .pipe(plumber())
+    .pipe(gulp.dest(paths.dist.statics))
 );
 
 // Browser-sync - proxy requests to our apache on vagrant
@@ -224,7 +235,7 @@ gulp.task('purge', () => {
 // Build the whole project by launching tasks synchronously
 gulp.task('dist', cb => {
   runSequence(
-    'clean', 'scss', 'ts', 'scripts-vendor', 'imagemin', 'svg-sprite', 'copy-index', 'copy-app', 'copy-statics', cb
+    'clean', 'scss', 'tslint', 'ts', 'scripts-vendor', 'imagemin', 'svg-sprite', 'copy-index', 'copy-app', 'copy-statics', cb
   );
 });
 
@@ -237,11 +248,11 @@ gulp.task('default', ['browser-sync'], function () {
     runSequence('clean-app', 'copy-app', 'browser-reload', done);
   }));
   watch(paths.src.allTs, batch((events, done) => {
-    runSequence('ts', 'browser-reload', done);
+    runSequence('tslint', 'ts', 'browser-reload', done);
   }));
   watch(paths.src.scss, batch((events, done) => {
     runSequence('scss', 'browser-reload', done);
-  }));
+  }))
   watch(paths.src.images, batch((events, done) => {
     runSequence('imagemin', 'browser-reload', done);
   }));
