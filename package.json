@@ -9,6 +9,9 @@
     "type": "git",
     "url": "https://github.com/gregzx/ultimate-html-boilerplate.git"
   },
+  "scripts": {
+    "clean": "shx rm -rf node_modules/ dist/"
+  },
   "devDependencies": {
     "@types/jquery": "^2.0.41",
     "browser-sync": "^2.18.6",
