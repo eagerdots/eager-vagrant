@@ -35,8 +35,8 @@ let autoprefixer = require('gulp-autoprefixer'),
 
 // Additional files to be included by scss
 let scssInclude = [
-  // 'node_modules/foundation-sites/scss',
-  // 'node_modules/normalize.css'
+  'node_modules/foundation-sites/scss',
+  'node_modules/normalize.css'
 ];
 
 let productionBuild = false; // Dev mode by default
