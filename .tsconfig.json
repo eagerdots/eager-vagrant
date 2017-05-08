@@ -5,12 +5,13 @@
     "moduleResolution": "node",
     "allowUnreachableCode": false,
     "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "baseUrl": "src/public/ts",
     "lib": [
       "dom", "es2015"
-    ],
-    "noUnusedLocals": true,
-    "noUnusedParameters": true
+    ]
   },
   "exclude": [
     "node_modules"
